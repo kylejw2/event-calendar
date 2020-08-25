@@ -40,6 +40,50 @@ const verifyUser = (email, password) => {
     return iou;
 }
 
+// CREATE a user
+const createUser = (user) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, options, (err, client) => {
+            assert.equal(err, null);
+            const db = client.db(db_name);
+            const collection = db.collection(col1_name);
+            collection.insertOne(user, (err, result) => {
+                assert.equal(err, null);
+                resolve(result.ops);
+                client.close();
+            });
+        });
+    });
+    return iou;
+}
+
+// VERIFY email
+const verifyEmail = (email) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, options, (err, client) => {
+            assert.equal(err, null);
+            const db = client.db(db_name);
+            const collection = db.collection(col1_name);
+            collection.find({}).toArray((err, docs) => {
+                assert.equal(err, null);
+                for (let i = 0; i < docs.length; i++) {
+                    if (docs[i].email === email) {
+                        resolve(true);
+                        break;
+                    }
+                    if (i === docs[i].length - 1) {
+                        resolve(false);
+                    }
+                }
+                client.close();
+            });
+        });
+    });
+    return iou;
+}
+
 module.exports = {
-    verifyUser
+    verifyUser,
+    createUser,
+    verifyEmail
 }
