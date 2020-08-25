@@ -14,16 +14,32 @@ router.get('/', function(req, res, next) {
 });
 
 // CREATE a user
-router.post('/', async (req, res, next) => {
+router.post('/register', async (req, res, next) => {
   const body = req.body;
   const response = await verifyEmail(body.email);
   if (response) {
     const data = await createUser(body);
     const token = await jwt.sign({id: data._id}, process.env.JWT_KEY);
-    res.send(token);
+    res.set('auth', token);
+    res.set('Access-Control-Expose-Headers', 'auth');
+    res.send();
   } else {
     res.status(401).send();
   }
-})
+});
+
+// Log in
+router.post('/login', async (req, res, next) => {
+  const body = req.body;
+  const response = await verifyUser(body.email, body.password);
+  if (response) {
+    const token = await jwt.sign({id: response}, process.env.JWT_KEY);
+    res.set('auth', token);
+    res.set('Access-Control-Expose-Headers', 'auth');
+    res.send();
+  } else {
+    res.status(401).send();
+  }
+});
 
 module.exports = router;

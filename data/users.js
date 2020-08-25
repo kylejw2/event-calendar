@@ -14,7 +14,6 @@ const options = {
 
 // Setup encryption process
 const bcrypt = require('bcrypt');
-const salt = 10;
 
 // VERIFY a user
 const verifyUser = (email, password) => {
@@ -29,7 +28,8 @@ const verifyUser = (email, password) => {
                     if (email === docs[i].email && bcrypt.compareSync(password, docs[i].password)) {
                         resolve(docs[i]._id);
                         break;
-                    } if (i === docs.length - 1) {
+                    }
+                    if (i === docs.length - 1) {
                         resolve(false);
                     }
                 }
