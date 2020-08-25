@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import Verify from './components/verify';
 
 function App() {
 
@@ -9,14 +10,14 @@ function App() {
     const canvas = canvasRef.current;
 
     // Multiply canvas height and width by 2 to support HD retina screen density on powerful computers
-    canvas.width = window.innerWidth * 2;
-    canvas.height = window.innerHeight * 2;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     canvas.style.width = `${window.innerWidth}px`;
     canvas.style.height = `${window.innerHeight}px`;
 
     const c = canvas.getContext('2d');
     // necessary to scale because of HD retina screens
-    c.scale(2,2);
+    // c.scale(2,2);
     
 
     class Circle {
@@ -29,21 +30,21 @@ function App() {
       }
       draw() {
         c.beginPath();
-        c.arc(this.x += this.velocity, this.y += this.velocity, this.radius, 0, Math.PI*2, false);
+        c.arc(this.x , this.y += this.velocity, this.radius, 0, Math.PI*2, false);
         c.fillStyle = this.color;
         c.fill();
         c.closePath();
-        if (this.x > canvas.width) {this.x = -5}
-        if (this.y > canvas.height) {this.y = -5}
+        if (this.x -5 > canvas.width) {this.x = -5}
+        if (this.y - 5 > canvas.height) {this.y = -5}
       }
       update() {
         this.draw();
       }
     }
-    let colors = ['#333333', '#643173', '#7D5BA6', '#86A59C', '#89CE94']
+    let colors = ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#3B1F2B']
     let objects = [];
     const init = () => {
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 500; i++) {
         const randX = Math.random() * canvas.width;
         const randY = Math.random() * canvas.height;
         const randRadius = (Math.random() * 4) + 4;
@@ -53,8 +54,13 @@ function App() {
       }
     }
     const animate = () => {
-      requestAnimationFrame(animate); //there could be an error here
-      c.clearRect(0,0, canvas.width, canvas.height);c.fillStyle = 'black';
+      requestAnimationFrame(animate);
+      c.clearRect(0,0, canvas.width, canvas.height);
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      c.fillStyle = 'black';
       c.fillRect(0,0, canvas.width, canvas.height);
       objects.forEach(circle => circle.draw())
     }
@@ -66,9 +72,14 @@ function App() {
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-    />
+    <div style={{position: "relative", margin: '0 auto'}}>
+      <canvas 
+        style={{position: "absolute"}}
+        ref={canvasRef}
+      />
+      <Verify />
+    </div>
+    
   );
 }
 
