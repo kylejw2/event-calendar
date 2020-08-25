@@ -49,7 +49,7 @@ const createUser = (user) => {
             const collection = db.collection(col1_name);
             collection.insertOne(user, (err, result) => {
                 assert.equal(err, null);
-                resolve(result.ops);
+                resolve(result.ops[0]);
                 client.close();
             });
         });
@@ -68,11 +68,11 @@ const verifyEmail = (email) => {
                 assert.equal(err, null);
                 for (let i = 0; i < docs.length; i++) {
                     if (docs[i].email === email) {
-                        resolve(true);
+                        resolve(false);
                         break;
                     }
-                    if (i === docs[i].length - 1) {
-                        resolve(false);
+                    if (i === docs.length - 1) {
+                        resolve(true);
                     }
                 }
                 client.close();

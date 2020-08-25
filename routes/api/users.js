@@ -16,10 +16,11 @@ router.get('/', function(req, res, next) {
 // CREATE a user
 router.post('/', async (req, res, next) => {
   const body = req.body;
-  const response = verifyEmail(body.email);
+  const response = await verifyEmail(body.email);
   if (response) {
     const data = await createUser(body);
-    console.log(data);
+    const token = await jwt.sign({id: data._id}, process.env.JWT_KEY);
+    res.send(token);
   } else {
     res.status(401).send();
   }
