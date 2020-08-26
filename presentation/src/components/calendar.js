@@ -24,7 +24,23 @@ const Calendar = (props) => {
             .then(response => response.json())
             .then(data => setEvents(data));
     }, [])
-    
+
+    const addEvent = async (event) => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(event)
+        }
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
+        if (response.status === 200) {
+            const myEvents = JSON.parse(JSON.stringify(events));
+            myEvents.push(response);
+            setEvents(myEvents);
+        }
+    }
+    console.log(events);
     const monthBank = [28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];
 
     const getMonthView = () => {
@@ -48,9 +64,28 @@ const Calendar = (props) => {
         for (let i = 0; i < 42; i++) {
             if (j <= monthBank[monthNum]) {
                 if (i === 6) {
-                    days.push(<Week key={i} last={true} num={i} day={j} monthDays={monthBank[monthNum]} year={year} month={monthNum}/>)
+                    days.push(<Week 
+                        key={i} 
+                        last={true} 
+                        num={i} 
+                        day={j} 
+                        monthDays={monthBank[monthNum]} 
+                        year={year} month={monthNum} 
+                        events={events}
+                        addEvent={addEvent}
+                    />)
                 } else if (i % 7 === 0 && i > 6) {
-                    days.push(<Week key={i} last={false} num={i} day={j} monthDays={monthBank[monthNum]} year={year} month={monthNum}/>)
+                    days.push(<Week 
+                        key={i} 
+                        last={false} 
+                        num={i} 
+                        day={j} 
+                        monthDays={monthBank[monthNum]} 
+                        year={year} 
+                        month={monthNum} 
+                        events={events}
+                        addEvent={addEvent}
+                    />)
                 }
                 if (i >= firstDay) { j++ }
             }
