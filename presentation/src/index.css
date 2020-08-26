@@ -55,7 +55,14 @@ th {
   text-align: center;
   /* background: rgb(231, 231, 231); */
   background: rgb(255, 185, 104);
+}
 
+tbody {
+  background: rgb(247, 247, 247);
+}
+
+* {
+  font: rgb(51, 51, 51);
 }
 
  /* Small devices (landscape phones, 576px and up) */

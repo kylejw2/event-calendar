@@ -52,11 +52,6 @@ const Calendar = () => {
                     <div className="col-4 offset-4 text-center">
                         <input type='month' value={month} onChange={({target}) => setMonth(target.value)} /> {' '}
                     </div>
-                    {/* <div className="col-4 text-center" style={{display: "flex", justifyContent:"space-around"}}>
-                        <span><i className="fa fa-toggle-left" style={{fontSize: "20px"}}></i></span>
-                        <span><h3> August, 2020 </h3></span>
-                        <span><i className="fa fa-toggle-right" style={{fontSize: "20px"}}></i></span>
-                    </div> */}
                     <div className="col-4 text-center">
                         <button className="btn btn-primary">Toggle Event View</button>
                     </div>
