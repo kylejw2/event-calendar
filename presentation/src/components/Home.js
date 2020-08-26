@@ -10,8 +10,7 @@ const Home = (props) => {
   }
 
   if (props.token) {
-    console.log(props.token);
-      handleSuccessfulAuth(props.token);
+    handleSuccessfulAuth(props.token);
   }
 
   const canvasRef = useRef(null);

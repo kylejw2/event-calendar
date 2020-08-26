@@ -21,6 +21,7 @@ router.post('/register', async (req, res, next) => {
     const data = await createUser(body);
     const token = await jwt.sign({id: data._id}, process.env.JWT_KEY);
     res.set('auth', token);
+    res.set('id', data._id);
     res.set('Access-Control-Expose-Headers', 'auth');
     res.send();
   } else {

@@ -1,15 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { getItem } from '../config/session';
 import Week from './Week';
 
-const Calendar = () => {
+const Calendar = (props) => {
+
+    if (!getItem('auth')) {
+        props.history.push('/');
+    }
+
     const [month, setMonth] = useState('');
     const [eventView, setEventView] = useState(false);
     const [monthView, setMonthView] = useState(true);
+    const [events, setEvents] = useState([]);
 
-    const findDay = (event) => {
-        event.preventDefault();
-    }
-
+    useEffect(() => {
+        // make an API call and retrieve all of the events associated with the user's id
+        const options = {
+            headers: {
+                'auth': getItem('auth')
+            }
+        }
+        fetch(`${process.env.REACT_APP_API_URL}/events`, options)
+            .then(response => response.json())
+            .then(data => setEvents(data));
+    }, [])
+    
     const monthBank = [28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];
 
     const getMonthView = () => {

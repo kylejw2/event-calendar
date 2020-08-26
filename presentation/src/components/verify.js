@@ -99,8 +99,11 @@ const Verify = (props) => {
     return (
         <div className='signup'> {signup ?
             (<form>
-                <h2>Sign up</h2>
-                <div className='form-group'>
+                <div>
+                <h2 className="signup-login-title">Sign up</h2>
+                </div>
+                <hr />
+                <div className='form-group' style={{marginTop: '35px'}}>
                     <input type='text' className='form-control' placeholder='Name' value={name} onChange={({target}) => setName(target.value)} required/>
                 </div>
                 <div className='form-group'>
@@ -119,7 +122,9 @@ const Verify = (props) => {
                 <div className='form-check'>
                     <input type='checkbox' className='form-check-input' checked={remember} onChange={handleRemember} /> {' Keep me signed in'}
                 </div>
-                <button className='btn btn-primary' onClick={handleRegister}>Register</button>
+                <hr />
+                <div className='signup-login-btn'>
+                <button className='btn btn-primary' onClick={handleRegister}>Sign up</button>
                 <p className="login-register" onClick={() => {
                     setName('');
                     setEmail('');
@@ -128,10 +133,14 @@ const Verify = (props) => {
                     setPasswordsMatch(true);
                     setSignup(false);
                 }}>Already have an account?</p>
+                </div>
             </form>) :
             (<form>
-                <h2>Log in</h2>
-                <div className='form-group'>
+                <div>
+                <h2 className='signup-login-title'>Log in</h2>
+                </div>
+                <hr />
+                <div className='form-group' style={{marginTop: '35px'}}>
                     <input type='email' className='form-control' placeholder='Email' value={emailLI} onChange={({target}) => setEmailLI(target.value)} required/>
                 </div>
                 <div className='form-group'>
@@ -141,6 +150,8 @@ const Verify = (props) => {
                 <div className='form-check'>
                     <input type='checkbox' className='form-check-input' checked={remember} onChange={handleRemember} /> {' Keep me signed in'}
                 </div>
+                <hr />
+                <div className='signup-login-btn'>
                 <button className='btn btn-primary' onClick={handleLogin}>Log in</button>
                 <p className='login-register' onClick={() => {
                     setEmailLI('');
@@ -148,6 +159,7 @@ const Verify = (props) => {
                     setPasswordLI('');
                     setSignup(true);
                 }}>Sign up here</p>
+                </div>
             </form>)
             }
         </div>
