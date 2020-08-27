@@ -7,18 +7,30 @@ const Day = (props) => {
     const [type, setType] = useState('');
 
     const getEvents = () => {
+        const dayEvents = [];
         const day = props.month === 11 ? 
             new Date(`${props.month - 10} ${props.day} ${props.year}`) : 
             new Date(`${props.month + 2} ${props.day} ${props.year}`);
         for (let i = 0; i < props.events.length; i++) {
-            if (props.events[i].date === day) {
+            if (new Date(props.events[i].date).toString() === day.toString()) {
                 // push to a list of daily events
+                dayEvents.push(<div>{props.events[i].name}</div>);
             }
         }
+        return dayEvents;
     }
 
     const addEvent = () => {
+        const event = {
+            name: name,
+            time: time,
+            type: type,
+            date: props.month === 11 ? 
+                new Date(`${props.month - 10} ${props.day} ${props.year}`) : 
+                new Date(`${props.month + 2} ${props.day} ${props.year}`)
+        };
 
+        props.addEvent(event);
     }
 
     return (
@@ -30,11 +42,13 @@ const Day = (props) => {
                         <div className="col-1">{props.day}</div>
                         <div className="col-4 offset-6 text-right">
                             <i className="fa fa-edit" style={{color: '#00aaff'}}></i> {' '}
-                            <i className="fa fa-plus-circle" style={{color: '#00b533'}} data-toggle="modal" data-target="#exampleModal" onClick={addEvent}></i>
+                            <i className="fa fa-plus-circle" style={{color: '#00b533'}} data-toggle="modal" data-target={`#exampleModal${props.day}`}></i>
                         </div>
                     </div>
+            {getEvents()}
+
                 </div>
-                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal fade" id={`exampleModal${props.day}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                         <div className="modal-header">
@@ -44,18 +58,30 @@ const Day = (props) => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <form>
-                                <input type='text' placeholder='Event name' value={name} onChange={({target}) => setName(target.value)} />
+                            <form className='add-event'>
+                                <div className='name-time'>
+                                    <input type='text' placeholder='Event name' value={name} onChange={({target}) => setName(target.value)} />
+                                    <input type='time' value={time} onChange={({target}) => setTime(target.value)} />
+                                </div>
+                                <div>
+                                    <input type='radio' name='type' onChange={() => setType('Appointment')} /> {' Appointment'}
+                                </div>
+                                <div>
+                                    <input type='radio' name='type' onChange={() => setType('Meeting')} /> {' Meeting'}
+                                </div>
+                                <div>
+                                    <input type='radio' name='type' onChange={() => setType('Reminder')} /> {' Reminder'}
+                                </div>
+                                
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-success">Save changes</button>
+                            <button type="button" className="btn btn-success" data-dismiss='modal' onClick={addEvent}>Save changes</button>
                         </div>
                         </div>
                     </div>
                 </div>
-            {getEvents()}
                 
             </td>
             

@@ -29,18 +29,21 @@ const Calendar = (props) => {
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'auth': getItem('auth')
             },
             body: JSON.stringify(event)
         }
         const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
+        console.log(response, event);
+        const data = await response.json();
         if (response.status === 200) {
             const myEvents = JSON.parse(JSON.stringify(events));
-            myEvents.push(response);
+            myEvents.push(data);
             setEvents(myEvents);
         }
     }
-    console.log(events);
+
     const monthBank = [28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];
 
     const getMonthView = () => {

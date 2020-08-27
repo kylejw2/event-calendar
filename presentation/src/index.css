@@ -89,12 +89,15 @@ tbody {
   color: white;
   /* height: 100px */
 }
-/* .modal-header > h5 {
-  font-family: 'Playfair Display';
-  font-weight: lighter !important;
-  line-height: 60px;
-  font-size: 50px;
-} */
+
+.add-event > div {
+  margin-top: 15px;
+}
+
+.name-time > input {
+  margin-right: 15px;
+}
+
 
  /* Small devices (landscape phones, 576px and up) */
  @media (min-width: 576px) { 

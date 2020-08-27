@@ -26,9 +26,18 @@ router.get('/', async (req, res, next) => {
 
 // POST new event
 router.post('/', async (req, res, next) => {
-  const body = req.body;
-  const response = await createEvent(body);
-  res.send(response);
+  const token = req.header('auth');
+  if (token) {
+    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    const body = req.body;
+    req.body.userId = decoded.id;
+    const response = await createEvent(body);
+    delete response._id;
+    delete response.userId;
+    res.send(response);
+  } else {
+    res.status(403).send();
+  }
 })
 
 module.exports = router;
