@@ -70,8 +70,26 @@ const updateEvent = (id, event) => {
     return iou;
 }
 
+// Delete an event
+const deleteEvent = (id) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, options, (err, client) => {
+            assert.equal(err, null);
+            const db = client.db(db_name);
+            const collection = db.collection(col2_name);
+            collection.findOneAndDelete({_id: new ObjectId(id)}, (err, result) => {
+                assert.equal(err, null);
+                resolve(result.value);
+                client.close();
+            });
+        });
+    });
+    return iou;
+}
+
 module.exports = {
     getEvents,
     createEvent,
-    updateEvent
+    updateEvent,
+    deleteEvent
 }
