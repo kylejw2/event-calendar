@@ -50,14 +50,14 @@ const getEvents = (id) => {
 }
 
 // Update an event for a specific user
-const updateEvent = (event) => {
+const updateEvent = (id, event) => {
     const iou =  new Promise((resolve, reject) => {
         MongoClient.connect(url, options, (err, client) => {
             assert.equal(err, null);
             const db = client.db(db_name);
             const collection = db.collection(col2_name);
             collection.findOneAndUpdate(
-                {_id: new ObjectId(event._id)},
+                {_id: new ObjectId(id)},
                 {$set: {...event}},
                 (err, result) => {
                     assert.equal(err, null);
@@ -72,5 +72,6 @@ const updateEvent = (event) => {
 
 module.exports = {
     getEvents,
-    createEvent
+    createEvent,
+    updateEvent
 }

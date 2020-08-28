@@ -3,6 +3,7 @@ import Event from './Event';
 
 const Day = (props) => {
 
+    // console.log(props.events);
     const [name, setName] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
@@ -19,7 +20,7 @@ const Day = (props) => {
             }
         }
         setEvents(quickSort(dayEvents));
-    }, []);
+    }, [props.events]);
 
     const addEvent = () => {
         if (name === '' || time === '' || type === '') {
@@ -36,9 +37,9 @@ const Day = (props) => {
             completed: false
         };
         props.addEvent(event);
-        const myEvents = JSON.parse(JSON.stringify(events));
-        myEvents.push(event);
-        setEvents(myEvents);
+        // const myEvents = JSON.parse(JSON.stringify(events));
+        // myEvents.push(event);
+        // setEvents(myEvents);
         setName('');
         setTime('');
         setType('');
@@ -70,15 +71,8 @@ const Day = (props) => {
         }
     }
 
-    const updateEvent = (index, name, time, type, completed) => {
-        const myEvents = JSON.parse(JSON.stringify(events));
-        myEvents[index].name = name;
-        myEvents[index].time = time;
-        myEvents[index].type = type;
-        myEvents[index].completed = completed;
-        setEvents(myEvents);
-
-        props.updateEvent(myEvents[index]._id, name, time, type, completed);
+    const updateEvent = (id, name, time, type, completed) => {
+        props.updateEvent(id, name, time, type, completed);
     }
 
     const getEventElements = () => {
@@ -99,9 +93,9 @@ const Day = (props) => {
                 time={events[i].time} 
                 name={events[i].name} 
                 key={i}
-                index={i}
+                id={events[i]._id}
                 updateEvent={updateEvent}
-                completed={completed}
+                completed={events[i].completed}
             />);    
         }
         return dayEventElements;

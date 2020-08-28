@@ -5,11 +5,13 @@ const Event = (props) => {
     const [name, setName] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
+    const [completed, setCompleted] = useState(false);
 
     useEffect(() => {
         setName(props.name);
         setTime(props.time);
         setType(props.type);
+        setCompleted(props.completed);
     }, [])
 
     let color = props.type === 'Appointment' ? '#F45B69' :
@@ -19,12 +21,17 @@ const Event = (props) => {
     }
 
     const updateEvent = (bool) => {
+        let prev = completed;
+        if (bool) {
+            prev = !prev;
+            setCompleted(prev);
+        }
         if (name === '' || time === '' || type === '') {
             window.alert('Unable to save changes. Name and time must be filled.')
             return;
         }
-
-        props.updateEvent(props.index, name, time, type, bool);
+        console.log(prev);
+        props.updateEvent(props.id, name, time, type, prev);
     }
 
     return (
@@ -35,7 +42,7 @@ const Event = (props) => {
                     +time.substr(0,2) < 13 ? `${time} p.m.` : `${time.substr(0,2) - 12}${time.substr(2)} p.m.` 
                     : `${time} a.m.`}
             </span> {' '}
-            <span className={props.completed ? 'completed' : ''}>
+            <span className={completed ? 'completed' : ''}>
                 {name}
             </span>
         </div>
@@ -67,8 +74,8 @@ const Event = (props) => {
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-warning" data-dismiss='modal' onClick={updateEvent}>Update</button>
-                    <button className='btn btn-success'>Mark Completed</button>
+                    <button type="button" className="btn btn-warning" data-dismiss='modal' onClick={() => updateEvent(false)}>Update</button>
+                    <button className='btn btn-success' data-dismiss='modal' onClick={() => updateEvent(true)}>{completed ? 'Mark Incomplete' : 'Mark Completed'}</button>
                     <button className='btn btn-danger'>Delete</button>
                 </div>
                 </div>

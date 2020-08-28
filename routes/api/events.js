@@ -46,7 +46,9 @@ router.patch('/', async (req, res, next) => {
     const decoded = await jwt.verify(token, process.env.JWT_KEY);
     const body = req.body;
     req.body.userId = decoded.id;
-    const response = await updateEvent(body);
+    const id = body._id;
+    delete body._id;
+    const response = await updateEvent(id, body);
     delete response.userId;
     res.send(response);
   } else {

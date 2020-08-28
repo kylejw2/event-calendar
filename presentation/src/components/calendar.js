@@ -44,12 +44,11 @@ const Calendar = (props) => {
 
     const updateEvent = async (id, name, time, type, completed) => {
         const index = events.findIndex(event => event._id === id);
-        const myEvent = JSON.parse(JSON.stringify(events[index]));
+        const myEvent = {...events[index]};
         myEvent.name = name;
         myEvent.time = time;
         myEvent.type = type;
         myEvent.completed = completed;
-        // setEvents(myEvents);
 
         const options = {
             method: 'PATCH',
@@ -62,8 +61,8 @@ const Calendar = (props) => {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
         const data = await response.json();
         if (response.status === 200) {
-            const myEvents = JSON.parse(JSON.stringify(events));
-            myEvents.push(data);
+            const myEvents = [...events];
+            myEvents.splice(index, 1, data);
             setEvents(myEvents);
         }
 
