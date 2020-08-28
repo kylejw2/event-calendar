@@ -4,7 +4,8 @@ var jwt = require('jsonwebtoken');
 
 const {
   getEvents,
-  createEvent
+  createEvent,
+  updateEvent
 } = require('../../data/events');
 
 // GET user's events
@@ -39,6 +40,18 @@ router.post('/', async (req, res, next) => {
 })
 
 // PATCH an existing event
-
+router.patch('/', async (req, res, next) => {
+  const token = req.header('auth');
+  if (token) {
+    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    const body = req.body;
+    req.body.userId = decoded.id;
+    const response = await updateEvent(body);
+    delete response.userId;
+    res.send(response);
+  } else {
+    res.status(403).send();
+  }
+});
 
 module.exports = router;
