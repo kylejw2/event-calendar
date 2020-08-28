@@ -3,7 +3,6 @@ import Event from './Event';
 
 const Day = (props) => {
 
-    // console.log(props.events);
     const [name, setName] = useState('');
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
@@ -37,9 +36,6 @@ const Day = (props) => {
             completed: false
         };
         props.addEvent(event);
-        // const myEvents = JSON.parse(JSON.stringify(events));
-        // myEvents.push(event);
-        // setEvents(myEvents);
         setName('');
         setTime('');
         setType('');
@@ -84,9 +80,7 @@ const Day = (props) => {
                 new Date(`${props.month + 2} ${props.day} ${props.year}`);
         for (let i = 0; i < events.length; i++) {
             let past = false;
-            let completed = false;
             if (day < yesterday) {past = true}
-            if (events[i].completed) {completed = true}
             dayEventElements.push(<Event 
                 past={past} 
                 type={events[i].type} 

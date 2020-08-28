@@ -6,16 +6,19 @@ const Event = (props) => {
     const [time, setTime] = useState('');
     const [type, setType] = useState('');
     const [completed, setCompleted] = useState(false);
+    const [color, setColor] = useState('');
 
     useEffect(() => {
         setName(props.name);
         setTime(props.time);
         setType(props.type);
         setCompleted(props.completed);
+        setColor(
+            props.type === 'Appointment' ? '#F45B69' :
+                    props.type === 'Meeting' ? '#456990' : '#028090'
+        )
     }, [])
 
-    let color = props.type === 'Appointment' ? '#F45B69' :
-                    props.type === 'Meeting' ? '#456990' : '#028090';
     if (props.past) {
         color = 'grey';
     }
@@ -30,7 +33,6 @@ const Event = (props) => {
             window.alert('Unable to save changes. Name and time must be filled.')
             return;
         }
-        console.log(prev);
         props.updateEvent(props.id, name, time, type, prev);
     }
 
@@ -62,13 +64,13 @@ const Event = (props) => {
                             <input type='time' value={time} onChange={({target}) => setTime(target.value)} required/>
                         </div>
                         <div>
-                            <input type='radio' name='type' onChange={() => setType('Appointment')} /> {' Appointment'}
+                            <input type='radio' name='type' onChange={() => {setType('Appointment'); setColor('#F45B69')}} /> {' Appointment'}
                         </div>
                         <div>
-                            <input type='radio' name='type' onChange={() => setType('Meeting')} /> {' Meeting'}
+                            <input type='radio' name='type' onChange={() => {setType('Meeting'); setColor('#456990')}} /> {' Meeting'}
                         </div>
                         <div>
-                            <input type='radio' name='type' onChange={() => setType('Reminder')} /> {' Reminder'}
+                            <input type='radio' name='type' onChange={() => {setType('Reminder'); setColor('#028090')}} /> {' Reminder'}
                         </div>
                     </form>
                 </div>
