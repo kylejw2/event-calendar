@@ -49,6 +49,27 @@ const getEvents = (id) => {
     return iou;
 }
 
+// Update an event for a specific user
+const updateEvent = (event) => {
+    const iou =  new Promise((resolve, reject) => {
+        MongoClient.connect(url, options, (err, client) => {
+            assert.equal(err, null);
+            const db = client.db(db_name);
+            const collection = db.collection(col2_name);
+            collection.findOneAndUpdate(
+                {_id: new ObjectId(event._id)},
+                {$set: {...event}},
+                (err, result) => {
+                    assert.equal(err, null);
+                    resolve(result.value);
+                    client.close();
+                }
+            );
+        });
+    });
+    return iou;
+}
+
 module.exports = {
     getEvents,
     createEvent

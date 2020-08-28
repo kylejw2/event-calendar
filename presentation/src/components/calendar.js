@@ -60,10 +60,10 @@ const Calendar = (props) => {
             body: JSON.stringify(myEvent)
         }
         const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
-        // const data = await response.json();
+        const data = await response.json();
         if (response.status === 200) {
             const myEvents = JSON.parse(JSON.stringify(events));
-            myEvents.push(myEvent);
+            myEvents.push(data);
             setEvents(myEvents);
         }
 
