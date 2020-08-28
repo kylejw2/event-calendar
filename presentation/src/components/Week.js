@@ -16,6 +16,7 @@ const Week = (props) => {
                     year={props.year}
                     addEvent={props.addEvent}
                     updateEvent={props.updateEvent}
+                    deleteEvent={props.deleteEvent}
                 />);
                 day--;
             }
@@ -30,6 +31,7 @@ const Week = (props) => {
                     year={props.year}
                     addEvent={props.addEvent}
                     updateEvent={props.updateEvent}
+                    deleteEvent={props.deleteEvent}
                 />);
                 day++;
             }

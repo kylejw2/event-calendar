@@ -19,9 +19,9 @@ const Event = (props) => {
         )
     }, [])
 
-    if (props.past) {
-        color = 'grey';
-    }
+    // if (props.past) {
+    //     setColor('grey');
+    // }
 
     const updateEvent = (bool) => {
         let prev = completed;
@@ -38,7 +38,7 @@ const Event = (props) => {
 
     return (
         <>
-        <div style={{background: `${color}`, color: '#f3f3f3', border: '1px solid #efefef', padding: '4px'}} data-toggle="modal" data-target={`#updateEventModal${name.replace(/\W/g, '')}${props.day}`}>
+        <div style={{background: `${props.past ? 'grey' :  color}`, color: '#f3f3f3', border: '1px solid #efefef', padding: '4px'}} data-toggle="modal" data-target={`#updateEventModal${name.replace(/\W/g, '')}${props.day}`}>
             <span style={{fontSize: 'small'}}>
                 {+time.substr(0, 2) >= 12 ? 
                     +time.substr(0,2) < 13 ? `${time} p.m.` : `${time.substr(0,2) - 12}${time.substr(2)} p.m.` 
@@ -78,7 +78,7 @@ const Event = (props) => {
                     <button type="button" className="btn btn-outline-secondary" data-dismiss="modal">Close</button>
                     <button type="button" className="btn btn-warning" data-dismiss='modal' onClick={() => updateEvent(false)}>Update</button>
                     <button className='btn btn-success' data-dismiss='modal' onClick={() => updateEvent(true)}>{completed ? 'Mark Incomplete' : 'Mark Completed'}</button>
-                    <button className='btn btn-danger'>Delete</button>
+                    <button className='btn btn-danger' data-dismiss='modal' onClick={() => props.deleteEvent(props.id)}>Delete</button>
                 </div>
                 </div>
             </div>

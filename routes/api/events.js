@@ -6,7 +6,8 @@ const {
   getEvents,
   createEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  verifyToken
 } = require('../../data/events');
 
 // GET user's events
@@ -58,13 +59,13 @@ router.patch('/', async (req, res, next) => {
 });
 
 // DELETE an existing event
-router.patch('/', async (req, res, next) => {
+router.delete('/', async (req, res, next) => {
   const token = req.header('auth');
   if (token) {
     const decoded = await jwt.verify(token, process.env.JWT_KEY);
     const validToken = await verifyToken(decoded.id);
     if (validToken) {
-      const id = req.body;
+      const id = req.header('id');
       const response = await deleteEvent(id);
       res.send(response);
     }

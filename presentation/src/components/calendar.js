@@ -68,8 +68,21 @@ const Calendar = (props) => {
 
     }
 
-    const deleteEvent = async () => {
-
+    const deleteEvent = async (id) => {
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'auth': getItem('auth'),
+                'id': id
+            }
+        }
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
+        if (response.status === 200) {
+            const index = events.findIndex(event => event._id === id);
+            const myEvents = [...events];
+            myEvents.splice(index, 1);
+            setEvents(myEvents);
+        }
     }
 
     const monthBank = [28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];
@@ -105,6 +118,7 @@ const Calendar = (props) => {
                         events={events}
                         addEvent={addEvent}
                         updateEvent={updateEvent}
+                        deleteEvent={deleteEvent}
                     />)
                 } else if (i % 7 === 0 && i > 6) {
                     days.push(<Week 
@@ -118,6 +132,7 @@ const Calendar = (props) => {
                         events={events}
                         addEvent={addEvent}
                         updateEvent={updateEvent}
+                        deleteEvent={deleteEvent}
                     />)
                 }
                 if (i >= firstDay) { j++ }

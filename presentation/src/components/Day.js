@@ -90,6 +90,7 @@ const Day = (props) => {
                 id={events[i]._id}
                 updateEvent={updateEvent}
                 completed={events[i].completed}
+                deleteEvent={props.deleteEvent}
             />);    
         }
         return dayEventElements;
