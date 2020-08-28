@@ -84,7 +84,7 @@ tbody {
   width: 80%;
 }
 
-.modal-header {
+.modal-day {
   background: #29a745;
   color: white;
   /* height: 100px */
@@ -96,6 +96,19 @@ tbody {
 
 .name-time > input {
   margin-right: 15px;
+}
+
+.modal-event {
+  background: #fdc108;
+}
+
+.complete-delete > button{
+  margin-right: 10px;
+  float:left;
+}
+
+.completed {
+  text-decoration: line-through;
 }
 
 

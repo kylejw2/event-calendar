@@ -14,7 +14,6 @@ router.get('/', async (req, res, next) => {
     const decoded = await jwt.verify(token, process.env.JWT_KEY);
     const response = await getEvents(decoded.id);
     for (let i = 0; i < response.length; i++) {
-      delete response[i]._id;
       delete response[i].userId;
     }
     res.send(response);
@@ -32,12 +31,14 @@ router.post('/', async (req, res, next) => {
     const body = req.body;
     req.body.userId = decoded.id;
     const response = await createEvent(body);
-    delete response._id;
     delete response.userId;
     res.send(response);
   } else {
     res.status(403).send();
   }
 })
+
+// PATCH an existing event
+
 
 module.exports = router;

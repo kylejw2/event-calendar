@@ -14,7 +14,6 @@ const Calendar = (props) => {
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        // make an API call and retrieve all of the events associated with the user's id
         const options = {
             headers: {
                 'auth': getItem('auth')
@@ -35,13 +34,43 @@ const Calendar = (props) => {
             body: JSON.stringify(event)
         }
         const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
-        console.log(response, event);
         const data = await response.json();
         if (response.status === 200) {
             const myEvents = JSON.parse(JSON.stringify(events));
             myEvents.push(data);
             setEvents(myEvents);
         }
+    }
+
+    const updateEvent = async (id, name, time, type, completed) => {
+        const index = events.findIndex(event => event._id === id);
+        const myEvent = JSON.parse(JSON.stringify(events[index]));
+        myEvent.name = name;
+        myEvent.time = time;
+        myEvent.type = type;
+        myEvent.completed = completed;
+        // setEvents(myEvents);
+
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth': getItem('auth')
+            },
+            body: JSON.stringify(myEvent)
+        }
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/events`, options);
+        // const data = await response.json();
+        if (response.status === 200) {
+            const myEvents = JSON.parse(JSON.stringify(events));
+            myEvents.push(myEvent);
+            setEvents(myEvents);
+        }
+
+    }
+
+    const deleteEvent = async () => {
+
     }
 
     const monthBank = [28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31];
@@ -76,6 +105,7 @@ const Calendar = (props) => {
                         year={year} month={monthNum} 
                         events={events}
                         addEvent={addEvent}
+                        updateEvent={updateEvent}
                     />)
                 } else if (i % 7 === 0 && i > 6) {
                     days.push(<Week 
@@ -88,6 +118,7 @@ const Calendar = (props) => {
                         month={monthNum} 
                         events={events}
                         addEvent={addEvent}
+                        updateEvent={updateEvent}
                     />)
                 }
                 if (i >= firstDay) { j++ }
