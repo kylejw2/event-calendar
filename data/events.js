@@ -70,6 +70,23 @@ const updateEvent = (id, event) => {
     return iou;
 }
 
+// Verify token
+const verifyToken = (id) => {
+    const iou = new Promise((resolve, reject) => {
+        MongoClient.connect(url, options, (err, client) => {
+            assert.equal(err, null);
+            const db = client.db(db_name);
+            const collection = db.collection(col2_name);
+            collection.find({}).toArray((err, docs) => {
+                assert.equal(err, null);
+                resolve(docs.some(doc => doc.userId === id))
+                client.close();
+            });
+        });
+    });
+    return iou;
+}
+
 // Delete an event
 const deleteEvent = (id) => {
     const iou = new Promise((resolve, reject) => {
@@ -91,5 +108,6 @@ module.exports = {
     getEvents,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    verifyToken
 }
