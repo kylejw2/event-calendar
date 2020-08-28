@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Event from './Event';
+import quickSort from './quickSort';
 
 const Day = (props) => {
 
@@ -18,6 +19,7 @@ const Day = (props) => {
                 dayEvents.push(props.events[i]);
             }
         }
+        console.log('rerender')
         setEvents(quickSort(dayEvents));
     }, [props.events]);
 
@@ -35,36 +37,11 @@ const Day = (props) => {
                 new Date(`${props.month + 2} ${props.day} ${props.year}`),
             completed: false
         };
+        console.log(event);
         props.addEvent(event);
         setName('');
         setTime('');
         setType('');
-    }
-
-    const quickSort = (arr) => {
-        if (arr.length < 2) { return arr; }
-        const pivot = arr[arr.length - 1];
-        const leftArr = [];
-        const rightArr = [];
-        for (let i = 0; i < arr.length - 1; i++) {
-            if (+pivot.time.substr(0, 2) > +arr[i].time.substr(0, 2)) {
-                leftArr.push(arr[i]);
-            } else if (+pivot.time.substr(0, 2) < +arr[i].time.substr(0, 2)) {
-                rightArr.push(arr[i]);
-            } else if (+pivot.time.substr(3, 2) >= +arr[i].time.substr(3, 2)) {
-                leftArr.push(arr[i]);
-            } else {
-                rightArr.push(arr[i]);
-            }
-        }
-
-        if (leftArr.length > 0 && rightArr.length > 0) {
-            return [...quickSort(leftArr), pivot, ...quickSort(rightArr)];
-        } else if (leftArr.length > 0) {
-            return [...quickSort(leftArr), pivot];
-        } else {
-            return [pivot, ...quickSort(rightArr)];
-        }
     }
 
     const updateEvent = (id, name, time, type, completed) => {
@@ -78,6 +55,7 @@ const Day = (props) => {
         const day = props.month === 11 ? 
                 new Date(`${props.month - 10} ${props.day} ${props.year}`) : 
                 new Date(`${props.month + 2} ${props.day} ${props.year}`);
+        console.log(events);
         for (let i = 0; i < events.length; i++) {
             let past = false;
             if (day < yesterday) {past = true}
@@ -86,11 +64,12 @@ const Day = (props) => {
                 type={events[i].type} 
                 time={events[i].time} 
                 name={events[i].name} 
-                key={i}
+                key={events[i]._id}
                 id={events[i]._id}
                 updateEvent={updateEvent}
                 completed={events[i].completed}
                 deleteEvent={props.deleteEvent}
+                monthView={true}
             />);    
         }
         return dayEventElements;
@@ -123,16 +102,16 @@ const Day = (props) => {
                                     <input type='text' placeholder='Event name' value={name} onChange={({target}) => setName(target.value)} required/>
                                     <input type='time' value={time} onChange={({target}) => setTime(target.value)} required/>
                                 </div>
-                                <div>
-                                    <input type='radio' name='type' onChange={() => setType('Appointment')} /> {' Appointment'}
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Event type
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <p class="dropdown-item" onClick={() => setType('Appointment')}>Appointment</p>
+                                        <p class="dropdown-item" onClick={() => setType('Meeting')}>Meeting</p>
+                                        <p class="dropdown-item" onClick={() => setType('Reminder')}>Reminder</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <input type='radio' name='type' onChange={() => setType('Meeting')} /> {' Meeting'}
-                                </div>
-                                <div>
-                                    <input type='radio' name='type' onChange={() => setType('Reminder')} /> {' Reminder'}
-                                </div>
-                                
                             </form>
                         </div>
                         <div className="modal-footer">

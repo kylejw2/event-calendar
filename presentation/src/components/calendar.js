@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { getItem } from '../config/session';
 import Week from './Week';
+import Event from './Event';
 
 const Calendar = (props) => {
 
@@ -9,7 +10,6 @@ const Calendar = (props) => {
     }
 
     const [month, setMonth] = useState('');
-    const [eventView, setEventView] = useState(false);
     const [monthView, setMonthView] = useState(true);
     const [events, setEvents] = useState([]);
 
@@ -140,7 +140,41 @@ const Calendar = (props) => {
             
         }
         return days;
+    }
 
+    const getEventView = () => {
+        let eventList = events.filter((event, i) => new Date(event.date).getMonth() + 1 === +month.substr(5, 2))
+        if (eventList.length === 0){return}
+        eventList.sort((a, b) => {
+            if (new Date(a.date) < new Date(b.date)) {
+                return -1;
+            } else if (new Date(a.date) > new Date(b.date)) {
+                return 1;
+            } else {
+                return +a.time.substr(0,2) - +b.time.substr(0,2);
+            }
+        })
+        return eventList.map((event, i) => {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return <Event 
+                type={event.type} 
+                time={event.time} 
+                name={event.name} 
+                key={event._id}
+                id={event._id}
+                updateEvent={updateEvent}
+                completed={event.completed}
+                deleteEvent={deleteEvent}
+                monthView={false}
+                date={new Date(event.date)}
+                past={new Date(event.date) < yesterday ? true : false}
+            /> 
+        })
+    }
+
+    const toggleView = () => {
+        setMonthView(prev => !prev);
     }
 
     return (
@@ -151,7 +185,7 @@ const Calendar = (props) => {
                         <input type='month' value={month} onChange={({target}) => setMonth(target.value)} /> {' '}
                     </div>
                     <div className="col-4 text-center">
-                        <button className="btn btn-primary">Toggle Event View</button>
+                        <button className="btn btn-primary" onClick={toggleView}>Toggle Event View</button>
                     </div>
                 </div>
             </nav>
@@ -175,7 +209,22 @@ const Calendar = (props) => {
                     </table>
                 </div>
                 :
-                <div></div>
+                <div>
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr className="table-head">
+                            <th scope="col" style={{width: `${window.innerWidth/5}px`}}>Event</th>
+                            <th scope="col" style={{width: `${window.innerWidth/5}px`}}>Date</th>
+                            <th scope="col" style={{width: `${window.innerWidth/5}px`}}>Time</th>
+                            <th scope="col" style={{width: `${window.innerWidth/5}px`}}>Type</th>
+                            <th scope="col" style={{width: `${window.innerWidth/5}px`}}>Configure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {getEventView()}
+                        </tbody>
+                    </table>
+                </div>
             }
         </div>
     )
